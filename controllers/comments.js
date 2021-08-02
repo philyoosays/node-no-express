@@ -1,10 +1,5 @@
-const fs = require('fs');
-const Config = require('../config');
 
-const redisCB = (err, reply) => {
-  if (err) console.error(err);
-  else console.log('Saved', reply, 'to Redis');
-}
+const Config = require('../config');
 
 module.exports = (db, redis) => (req, res) => {
   // callbacks
@@ -36,6 +31,7 @@ module.exports = (db, redis) => (req, res) => {
             } else {
               db.getComments()
               .then(data => {
+                // set redis
                 const comments = JSON.stringify(data);
                 redis.setex('comments', Config.CACHE_EX, comments);
                 return data;
