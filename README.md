@@ -15,7 +15,9 @@ $ npm start
 ## API details
 
 `http://localhost:5000/comments`
+
 `GET` - returns an array
+
 `POST` - Expects JSON object with one key - `comments: string`
 
 ## Config Vars
@@ -23,4 +25,5 @@ $ npm start
 Supplied by process.env
 
 `CACHE_EX` - Cache expiration in seconds
+
 `PORT` - Server port (default: 5000)
