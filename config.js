@@ -6,7 +6,7 @@ module.exports = {
     path: './db/sqldb.db',
     schema: './db/schema.sql'
   },
-  CACHE_EX: CACHE_EX || 10,
+  CACHE_EX: parseInt(CACHE_EX) || 10,
   HOST: HOST || 'localhost',
-  PORT: PORT || 5000,
+  PORT: parseInt(PORT) || 5000,
 }
