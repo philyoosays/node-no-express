@@ -17,7 +17,7 @@ module.exports = (db, redis) => (req, res) => {
 
   // op
   const { method } = req;
-  // redis.del('comments');
+  redis.del('comments');
 
   try {
     switch (method) {
