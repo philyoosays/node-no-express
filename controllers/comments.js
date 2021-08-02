@@ -1,14 +1,18 @@
 const fs = require('fs');
+const Config = require('../config');
+
+const redisCB = (err, reply) => {
+  if (err) console.error(err);
+  else console.log('Saved', reply, 'to Redis');
+}
 
 module.exports = (db, redis) => (req, res) => {
   // callbacks
   const handleSuccess = (data = []) => {
-    const dataToSend = data.map(record => {
-      if (record.headers) delete record.headers;
-      return record;
-    })
     res.writeHead(200)
-    res.end(JSON.stringify(dataToSend));
+    if (typeof data === 'string') res.end(data);
+    else res.end(JSON.stringify(data));
+    return data;
   }
   const handleError = (err) => {
     console.error('ResHandler', err)
@@ -17,21 +21,37 @@ module.exports = (db, redis) => (req, res) => {
   }
 
   // op
-  const { headers, method } = req;
+  const { method } = req;
+  // redis.del('comments');
 
   try {
     switch (method) {
       case 'GET':
-        db.getComments()
-        .then(handleSuccess)
-        .catch(handleError);
+        redis.get('comments', (err, data) => {
+          if (err) console.error(err);
+          else {
+            if (data) {
+              console.log('Comments retrieved from Redis', data);
+              handleSuccess(data);
+            } else {
+              db.getComments()
+              .then(data => {
+                const comments = JSON.stringify(data);
+                redis.setex('comments', Config.CACHE_EX, comments);
+                return data;
+              })
+              .then(handleSuccess)
+              .catch(handleError);
+            }
+          }
+        })
         break;
 
       case 'POST':
         let body = {};
         req.on('data', (data) => {
           body = JSON.parse(data);
-          db.postComment(body, headers)
+          db.postComment(body)
           .then(handleSuccess)
           .catch(handleError);
         });

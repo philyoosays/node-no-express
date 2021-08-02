@@ -1,4 +1,4 @@
 INSERT INTO comments
-(comment, headers, datetime_created)
+(comment, datetime_created)
 VALUES
-(?, ?, ?);
+(?, ?);

@@ -1,10 +1,10 @@
 const { CommentsCtrl } = require('../controllers');
 
-module.exports = (db) => (req, res) => {
+module.exports = (db, redis) => (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   switch (req.url) {
     case '/comments':
-      CommentsCtrl(db)(req, res);
+      CommentsCtrl(db, redis)(req, res);
       break;
     default:
       res.writeHead(404);

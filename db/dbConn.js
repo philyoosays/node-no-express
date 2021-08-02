@@ -33,12 +33,11 @@ module.exports = class DBConn {
     });
   }
 
-  postComment = (data, headers) => {
+  postComment = (data) => {
     console.log('DBConn.postComment');
     return new Promise((resolve, reject) => {
       const params = [
         data.comment,
-        headers,
         new Date(),
       ];
       this.db.run(postCommentSQL, params, function (err) {
@@ -48,7 +47,7 @@ module.exports = class DBConn {
           reject(err);
         } else {
           console.log(`Inserted ${this.changes} rows`);
-          resolve([{ commentID: this.lastID }]);
+          resolve([{ id: this.lastID }]);
         }
       });
     });
