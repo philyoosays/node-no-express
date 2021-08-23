@@ -1,5 +1,3 @@
-# Phil Yoo VICE take home
-
 ## Redis details
 
 This is assuming a redis server is running locally. I ran it in my CLI.
